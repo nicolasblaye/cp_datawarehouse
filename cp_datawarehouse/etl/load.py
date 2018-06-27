@@ -39,3 +39,29 @@ def insert_users_list(users_list):
             "Successfully inserted {nb_rows} CSV row(s) in cp_datawarehouse.users table".format(
             nb_rows=cur.rowcount
         ))
+
+
+def insert_rides_list(rides_list):
+    """
+        Insert into users database table the values given as CSV with header.
+        :param list users_list: the CSV list INCLUDING HEADER ROW which is skipped during insertion
+    """
+    conn = psycopg2.connect(CONFIG["postgres_url"])
+
+    with conn:
+        cur = conn.cursor()
+
+        LOGGER.info("Inserting {nb_rows} CSV row(s) in cp_datawarehouse.rides table...".format(
+            nb_rows=len(rides_list) - 1  # Skip the first header row
+        ))
+        psycopg2.extras.execute_values(
+            cur,
+            "INSERT INTO cp_datawarehouse.rides VALUES %s",
+            # Skip the first header row
+            rides_list[1:]
+        )
+        LOGGER.info(cur.statusmessage)
+        LOGGER.info(
+            "Successfully inserted {nb_rows} CSV row(s) in cp_datawarehouse.rides table".format(
+                nb_rows=cur.rowcount
+            ))
