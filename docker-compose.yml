@@ -1,0 +1,15 @@
+version: '2'
+services:
+  postgres-dw:
+    image: mdillon/postgis:9.5
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD:
+      POSTGRES_DB: cp_datawarehouse
+    ports:
+      - 65432:5432
+  python-test:
+    build: .
+    command: pytest
+    environment:
+      POSTGRES_URL: postgresql://postgres:@postgres-dw:5432/cp_datawarehouse
