@@ -12,14 +12,11 @@ WHERE state LIKE 'completed%'
 GROUP BY day;
 
 -- Question 3
-
-SELECT COUNT(ride_id) AS nb_rides, to_char("quote_date",'DD/MM/YYYY') AS "day"
-FROM cp_datawarehouse.rides
-WHERE state LIKE 'completed%'
-GROUP BY day
-ORDER BY nb_rides ASC limit 5;
-
-
-
-
--- todo: test load -> test it after finishing query 3, fix pandas query + fix pandas dataframe, order query by day?
+SELECT * FROM (
+    SELECT COUNT(ride_id) AS nb_rides, to_char("quote_date",'DD/MM/YYYY') AS "day"
+    FROM cp_datawarehouse.rides
+    WHERE state LIKE 'completed%'
+    GROUP BY day
+    ORDER BY nb_rides ASC limit 5
+) as T1
+ORDER BY day asc;
