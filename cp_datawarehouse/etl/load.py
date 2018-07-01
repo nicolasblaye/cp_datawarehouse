@@ -6,6 +6,7 @@ import logging
 
 import psycopg2
 import psycopg2.extras
+import pandas as pd
 
 from cp_datawarehouse.config.base import config
 
@@ -41,7 +42,7 @@ def insert_users_list(users_list):
 
 
 def insert_rides_dataframe(rides_df):
-    insert_rides_list(rides_df.where((rides_df.notnull(rides_df)), None).values.tolist())
+    insert_rides_list(rides_df.where((pd.notnull(rides_df)), None).values.tolist())
 
 
 def insert_rides_list(rides_list):
@@ -55,13 +56,12 @@ def insert_rides_list(rides_list):
         cur = conn.cursor()
 
         LOGGER.info("Inserting {nb_rows} CSV row(s) in cp_datawarehouse.rides table...".format(
-            nb_rows=len(rides_list) - 1  # Skip the first header row
+            nb_rows=len(rides_list)
         ))
         psycopg2.extras.execute_values(
             cur,
             "INSERT INTO cp_datawarehouse.rides VALUES %s",
-            # Skip the first header row
-            rides_list[1:]
+            rides_list
         )
         LOGGER.info(cur.statusmessage)
         LOGGER.info(
