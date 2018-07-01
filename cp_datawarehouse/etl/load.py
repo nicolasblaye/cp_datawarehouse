@@ -41,8 +41,7 @@ def insert_users_list(users_list):
 
 
 def insert_rides_dataframe(rides_df):
-    # todo tests
-    insert_rides_list(rides_df.where((pd.notnull(rides_df)), None).values.tolist())
+    insert_rides_list(rides_df.where((rides_df.notnull(rides_df)), None).values.tolist())
 
 
 def insert_rides_list(rides_list):
